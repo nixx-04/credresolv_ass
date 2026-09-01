@@ -164,7 +164,7 @@ async def print_stats(campaign_id: str, label: str) -> None:
     print("Connected calls:", connected_calls)
     print("Completed calls:", completed_calls)
     print("Abandoned calls:", abandoned_calls)
-    print("Approx agent utilization:", f"{utilization:.2f}")
+    print("Calls completed per agent:", f"{utilization:.2f}")
 
 
 async def run_scenario(
@@ -194,7 +194,7 @@ async def run_scenario(
         event_callback=callback,
         answer_rate=answer_rate,
         talk_time_sec=scaled_talk_time,
-        failure_rate=0.02,
+        failure_rate=0.0,
         latency_sec=0.01,
     )
 
@@ -202,7 +202,7 @@ async def run_scenario(
         event_callback=callback,
         answer_rate=answer_rate,
         talk_time_sec=scaled_talk_time,
-        timeout_rate=0.10,
+        timeout_rate=0.0,
         latency_min_sec=0.01,
         latency_max_sec=0.04,
     )
@@ -246,7 +246,7 @@ async def run_scenario(
         await asyncio.sleep(0.03)
 
     # Allow provider simulation tasks to finish.
-    await asyncio.sleep(0.8)
+    await asyncio.sleep(2.0)
 
     total_requested = sum(d.get("requested", 0) for d in decisions)
     total_approved = sum(d.get("approved", 0) for d in decisions)

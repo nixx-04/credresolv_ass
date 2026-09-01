@@ -1,9 +1,12 @@
+import logging
 from typing import Optional, Tuple
 from uuid import uuid4
 
 from sqlalchemy import text
 
 from smartdialer.states import AgentState, BorrowerState, CallState
+
+logger = logging.getLogger("smartdialer.allocator")
 
 
 async def reserve_available_agent(session, campaign_id: str) -> Optional[str]:
@@ -120,7 +123,7 @@ async def set_agent_state(
     session,
     agent_id: Optional[str],
     to_state: str,
-    from_states: list[str],
+    from_states: list,
 ) -> bool:
     if not agent_id or not from_states:
         return False
@@ -202,7 +205,8 @@ async def initiate_approved_calls(
 
     Important:
     - Agent and borrower reservation happens in a short transaction.
-    - The call row is committed as INITIATED before provider events are likely to arrive.
+    - The call row is committed as INITIATED before provider events are
+      likely to arrive.
     - This avoids webhook handlers seeing an uncommitted call row.
     """
     initiated = 0
@@ -287,6 +291,7 @@ async def initiate_approved_calls(
         try:
             response = await provider.initiate_call(call_id, phone)
         except Exception:
+            logger.exception("provider.initiate_call raised for call %s", call_id)
             response = None
 
         if response is not None and response.accepted:
@@ -309,6 +314,16 @@ async def initiate_approved_calls(
                     )
             initiated += 1
         else:
+            logger.warning(
+                "provider %s rejected call %s: %s",
+                provider.name,
+                call_id,
+                getattr(response, "error", "NO_RESPONSE"),
+            )
+
+            # If the provider rejects the call, we must fail the call and
+            # release the reserved borrower (and agent, in progressive mode),
+            # otherwise resources stay locked and pacing sees phantom load.
             async with session_maker() as session:
                 async with session.begin():
                     await session.execute(

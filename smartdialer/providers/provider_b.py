@@ -36,7 +36,7 @@ class ProviderB(TelecomProvider):
         to_number: str,
         from_number: str = "1000",
     ) -> ProviderResponse:
-        provider_call_id = str(uuid.uuid4())
+        provider_call_id = str(uuid4())
 
         await asyncio.sleep(random.uniform(self.latency_min_sec, self.latency_max_sec))
 

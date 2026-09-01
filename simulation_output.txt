@@ -1,0 +1,56 @@
+
+Scenario A pacing decisions
+Requested: 1008
+Approved: 235
+Initiated: 235
+
+=== Scenario A ===
+Agents: {'AVAILABLE': 9, 'WRAP_UP': 1}
+Calls: {'COMPLETED': 39, 'FAILED': 196}
+Initiated calls: 235
+Connected calls: 39
+Completed calls: 39
+Abandoned calls: 0
+Calls completed per agent: 3.90
+
+Scenario B pacing decisions
+Requested: 249
+Approved: 180
+Initiated: 180
+
+=== Scenario B ===
+Agents: {'AVAILABLE': 2, 'WRAP_UP': 8}
+Calls: {'COMPLETED': 98, 'FAILED': 82}
+Initiated calls: 180
+Connected calls: 98
+Completed calls: 98
+Abandoned calls: 0
+Calls completed per agent: 9.80
+
+Scenario C pacing decisions
+Requested: 76
+Approved: 76
+Initiated: 76
+
+=== Scenario C ===
+Agents: {'AVAILABLE': 3, 'WRAP_UP': 7}
+Calls: {'COMPLETED': 53, 'FAILED': 23}
+Initiated calls: 76
+Connected calls: 53
+Completed calls: 53
+Abandoned calls: 0
+Calls completed per agent: 5.30
+
+Scenario D pacing decisions
+Requested: 1258
+Approved: 20
+Initiated: 20
+
+=== Scenario D ===
+Agents: {'AVAILABLE': 10}
+Calls: {'COMPLETED': 12, 'FAILED': 8}
+Initiated calls: 20
+Connected calls: 12
+Completed calls: 12
+Abandoned calls: 1
+Calls completed per agent: 1.20
